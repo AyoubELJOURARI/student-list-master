@@ -5,13 +5,13 @@ services:
         depends_on: 
             - api
         volumes: 
-            - /opt/website:/var/www/html
+            - ./website:/var/www/html
         ports: 
             - "3000:80"
     api:
         build: ./simple_api
         volumes:
-            - /opt/simple_api:/usr/src/app
+            - ./simple_api:/usr/src/app
         ports:
             - "5000:80"
 
