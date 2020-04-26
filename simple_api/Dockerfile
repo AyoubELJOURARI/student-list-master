@@ -1,6 +1,6 @@
 FROM centos7
 
-MAINTAINER El jourari ayoub/EL GARH Najah/Belkouch yasser
+MAINTAINER Eljourari ayoub/ELGARH Najah/Belkouch yasser
 
 # Install Apache
 RUN yum -y update
