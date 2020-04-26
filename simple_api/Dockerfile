@@ -1,13 +1,37 @@
-From python:2.7-stretch
+FROM centos7
 
 MAINTAINER El jourari ayoub/EL GARH Najah/Belkouch yasser
+
+# Install Apache
+RUN yum -y update
+RUN yum -y install httpd httpd-tools
+
+# Install EPEL Repo
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+ && rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+# Install PHP
+RUN yum --enablerepo=remi-php73 -y install php php-bcmath php-cli php-common php-gd php-intl php-ldap php-mbstring \
+    php-mysqlnd php-pear php-soap php-xml php-xmlrpc php-zip
+
+# Update Apache Configuration
+RUN sed -E -i -e '/<Directory "\/var\/www\/html">/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+RUN sed -E -i -e 's/DirectoryIndex (.*)$/DirectoryIndex index.php \1/g' /etc/httpd/conf/httpd.conf
 
 COPY . /usr/src/app
 COPY ./student_age.py .
 COPY ./student_age.json /data/
 
-RUN apt-get update -y && apt-get install python-dev python3-dev libsasl2-dev python-dev libldap2-dev libssl-dev -y
-RUN pip install flask flask_httpauth flask_simpleldap python-dotenv
+RUN yum -y update
+RUN yum install epel-release -y && yum install python-pip -y
+RUN yum install  python python3 libsasl2-dev libldap2-dev libssl-dev -y 
+RUN yum install vim -y
+RUN pip --version
+RUN pip install --upgrade pip
+RUN pip install flask python-dotenv
+
+# Start Apache
+CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
 
 CMD [ "python", "./student_age.py" ]
 
