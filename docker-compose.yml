@@ -1,20 +1,17 @@
 version: "3"
 services:
     website:
-        image: php:apache
+        image: centos:7
         depends_on: 
             - api
         volumes: 
-            - ./website:/var/www/html
+            - /opt/website:/var/www/html
         ports: 
             - "3000:80"
-        environment:
-            DATABASE_USER: Pozo
-            DATABASE_PASSWORD: pozopass
     api:
         build: ./simple_api
         volumes:
-            - ./simple_api:/usr/src/app
+            - /opt/simple_api:/usr/src/app
         ports:
             - "5000:80"
 
